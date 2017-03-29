@@ -1,22 +1,22 @@
 
 # coding: utf-8
 
-# # Problem Set 2, due January 23th at 5:30 pm/January 24th 3:30pm
+# # Exploration of the Progresa Data set
 # 
-# **Please Note:** This assignment will likely take you a _long_ time, especially if you are new to Python. Start early!
+# This will involve the explorations and analysis of the progresa data set in an attempt to quantize the evident effect of the program if any.
 
-# ## Introduction to the assignment
+# ## Introduction
 # 
-# For this assignment, you will be using data from the [Progresa program](http://en.wikipedia.org/wiki/Oportunidades), a government social assistance program in Mexico. This program, as well as the details of its impact, are described in the paper "[School subsidies for the poor: evaluating the Mexican Progresa poverty program](http://www.sciencedirect.com/science/article/pii/S0304387803001858)", by Paul Shultz (available on Canvas). Please familiarize yourself with the PROGRESA program before beginning this problem set, so you have a rough sense of where the data come from and how they were generated. If you just proceed into the problem set without understanding Progresa or the data, it will be very difficult!
+# We will be using data from the [Progresa program](http://en.wikipedia.org/wiki/Oportunidades), a government social assistance program in Mexico. This program, as well as the details of its impact, are described in the paper "[School subsidies for the poor: evaluating the Mexican Progresa poverty program](http://www.sciencedirect.com/science/article/pii/S0304387803001858)", by Paul Shultz (available on Canvas). This will be used to familiarize ourself with the progresa dataset and get a rough sense of where the data comes from and how was it generated.
 # 
-# The goal of this problem set is to implement some of the basic econometric techniques that you are learning in class to measure the impact of Progresa on secondary school enrollment rates. The timeline of the program was:
+# The goal of this exploration is to implement some of the basic econometric techniques learnt in Machine Learning class to measure the impact of Progresa on secondary school enrollment rates. The timeline of the program was:
 # 
 #  * Baseline survey conducted in 1997
 #  * Intervention begins in 1998, "Wave 1" of data collected in 1998
 #  * "Wave 2 of data" collected in 1999
 #  * Evaluation ends in 2000, at which point the control villages were treated. 
 #  
-# When you are ready, download the progresa_sample.csv data from Canvas. The data are actual data collected to evaluate the impact of the Progresa program.  In this file, each row corresponds to an observation taken for a given child for a given year. There are two years of data (1997 and 1998), and just under 40,000 children who are surveyed in each year. For each child-year observation, the following variables are collected:
+# In the data, each row corresponds to an observation taken for a given child for a given year. There are two years of data (1997 and 1998), and just under 40,000 children who are surveyed in each year. For each child-year observation, the following variables are collected:
 # 
 # | Variable name | Description|
 # |---------|---------|
@@ -43,11 +43,11 @@
 
 # ---
 # 
-# ##Part 1: Descriptive analysis
+# ## Part 1: Descriptive analysis
 # 
 # ### 1.1	Summary Statistics
 # 
-# Present summary statistics (mean and standard deviation) for all of the demographic variables in the dataset (i.e., everything except year, folnum, village). Present these in a single table alphabetized by variable name. Do NOT simply expect the grader to scroll through your output!
+# Presenting summary statistics (mean and standard deviation) for all of the demographic variables in the dataset (i.e., everything except year, folnum, village). Present these in a single table alphabetized by variable name.
 
 # In[1]:
 
@@ -97,11 +97,11 @@ len(progresa_df['village'].unique())
 #     * Slicing and storing the columns values as rows.
 # We have gone for the first method as it is memory conservative and the original Dataframe is unadulterated. Removing the non-demographic columns using their indices. Caluculating Mean and standard deviation as new columns and then removing the remaining 77250 data columns.
 
-# ### 1.2 Differences at baseline?
+# ### 1.2 Differences at baseline
 # 
-# Are the baseline (1997) demographic characteristics **for the poor**  different in treatment and control villages? Hint: Use a T-Test to determine whether there is a statistically significant difference in the average values of each of the variables in the dataset. Focus only on the data from 1997 for individuals who are poor (i.e., poor=='pobre').
+# Are the baseline (1997) demographic characteristics **for the poor**  different in treatment and control villages? Using a T-Test to determine whether there is a statistically significant difference in the average values of each of the variables in the dataset. Here we focus only on the data from 1997 for individuals who are poor (i.e., poor=='pobre').
 # 
-# Present your results in a single table with the following columns and 14 (or so) rows:
+# Results presented in a single table with the following columns and 14 (or so) rows:
 # 
 # | Variable name | Average value (Treatment villages) | Average value (Control villages) | Difference (Treat - Control) | p-value |
 # |------|------|------|------|------|
@@ -178,10 +178,6 @@ ttest_df
 # 
 
 # ### 1.3 Interpretation
-# 
-# * A: Are there statistically significant differences between treatment and control villages as baseline? 
-# * B: Why does it matter if there are differences at baseline?
-# * C: What does this imply about how to measure the impact of the treatment?
 
 # **A: Are there statistically significant differences between treatment and control villages as baseline?** 
 # Observing the output of the T-Test the statistical dofferences are eveident between the two samples of treatment and control. Especially in the following variables.
@@ -195,7 +191,7 @@ ttest_df
 
 # ### 1.4 Graphical exploration, part 1
 # 
-# For each level of household head education, compute the average enrollment rate in 1997. Create a scatterplot that shows this relationship. What do you notice?
+# For each level of household head education, computing the average enrollment rate in 1997. Creating a scatterplot that shows this relationship.
 
 # In[6]:
 
@@ -234,9 +230,8 @@ progresa_df[(progresa_df.hohedu==20)].sc
 
 # ### 1.5 Graphical exploration, part 2
 # 
-# Create a histogram of village enrollment rates **among poor households in treated villages**, before and after treatment. Specifically, for each village, calculate the average rate of enrollment of poor households in treated villages in 1997, then compute the average rate of enrollment of poor households in treated villages in 1998. Create two separate histograms showing the distribution of these average enrollments rates, one histogram for 1997 and one histogram for 1998. On each histogram, draw a vertical line that intersects the x-axis at the average value (across all households).
-# * Does there appear to be a difference? Is this difference statistically significant?
-# * Which D estimator in Schultz (2004) does this approach correspond to?
+# Creating a histogram of village enrollment rates **among poor households in treated villages**, before and after treatment. Specifically, for each village, calculating the average rate of enrollment of poor households in treated villages in 1997, then compute the average rate of enrollment of poor households in treated villages in 1998. Create two separate histograms showing the distribution of these average enrollments rates, one histogram for 1997 and one histogram for 1998. On each histogram, draw a vertical line that intersects the x-axis at the average value (across all households).
+# 
 
 # In[8]:
 
@@ -290,10 +285,11 @@ print("The output of T test on the above values are:\n", stats.ttest_ind(before_
 # 
 # ### 2.1 Simple differences: T-test
 # 
-# Start out by estimating the impact of Progresa using "simple differences." Restricting yourself to data from 1998 (after treatment).
-# * calculate the average enrollment rate among **poor** households in the Treatment villages and the average enrollment rate among **poor** households in the control villages.
-# * Which difference estimator in Schultz (2004) does this approach correspond to?
-# * Use a t-test to determine if this difference is statistically significant. What do you conclude?
+# Estimating the impact of Progresa using "simple differences." Restricting to data from 1998 (after treatment).
+# 
+# * calculating the average enrollment rate among **poor** households in the Treatment villages and the average enrollment rate among **poor** households in the control villages.
+# * Determining which difference estimator in Schultz (2004) does this approach correspond to?
+# * Using a t-test to determine if this difference is statistically significant.
 
 # In[9]:
 
@@ -317,12 +313,7 @@ print('\nThe output of T test is as follows:\n', tt2)
 
 # ### 2.2 Simple differences: Regression
 # 
-# Estimate the effects of Progresa on enrollment using a regression model, by regressing the 1998 enrollment rates **of the poor** on treatment assignment. Discuss the following:
-# 
-# * Based on this model, how much did Progresa increase the likelihood of a child enrolling?
-# * How does your regression estimate compare to your t-test estimate from part 2.1?
-# * Based on this regression model, can we reject the null hypothesis that the treatment effects are zero? 
-# * What is the counterfactual assumption underlying this regression?
+# Estimating the effects of Progresa on enrollment using a regression model, by regressing the 1998 enrollment rates **of the poor** on treatment assignment.
 
 # In[10]:
 
@@ -333,6 +324,8 @@ regr = smf.ols('sc ~ progresa', data= en_regr).fit()
 regr.summary()
 
 
+# **Observations:**
+# 
 # **Based on this model, how much did Progresa increase the likelihood of a child enrolling?**
 #     We can observe that the parameter associated with progresa is positive, hence an increasing relationship. The magnitude of this parameter found is 0.0388, the magnitude of the intercept is found to be 0.8076. Therefore Progresa increases the likelihood of enrollment by 0.0388 i.e. likelihood of enrollment without progresa is 0.8076 and with progresa is 0.8464
 # 
@@ -363,17 +356,14 @@ test_regr = smf.ols(formula='sc ~ v1 + v3', data=test_df).fit()
 test_regr.summary()
 
 
-# ### For personal understanding only.
+# ### Self intuition.
 # 
 # We see here that the coefficient of v1 is -0.3333 and v3 is 0.6667 and the intercept is 0.3333. confirming that negative relation actually means an opposite nature.!
 
 # ### 2.3 Multiple Regression
 # 
-# Re-run the above regression estimated but this time include a set of control variables. Include, for instance, age, distance to a secondary school, gender, education of household head, indigenous, etc.
+# Re-comuting the above regression estimated by including a set of control variables. Include, for instance, age, distance to a secondary school, gender, education of household head, indigenous, etc.
 # 
-# * How do the controls affect the point estimate of treatment effect?
-# * How do the controls affect the standard error on the treatment effect? 
-# * How do you interpret the differences (or similarities) between your estimates of 2.2 and 2.3?
 
 # In[12]:
 
@@ -381,6 +371,8 @@ multi_regr = smf.ols('sc ~ progresa + age + dist_sec + sex + hohedu + indig', da
 multi_regr.summary()
 
 
+# **Observations:**
+# 
 # **How do the controls affect the point estimate of treatment effect?**
 #     The very first effect we can see is the decrease in point estimate of the treatment from 0.00388 ot 0.00356. We can also observe that there are other parameters which exhibit statistically significant effect on the avg. enrollment rate.
 # 
@@ -395,10 +387,7 @@ multi_regr.summary()
 # 
 # Thus far, we have computed the effects of Progresa by estimating the difference in 1998 enrollment rates across villages. An alternative approach would be to compute the treatment effect using a difference-in-differences framework.
 # 
-# Begin by estimating the average treatment effects of the program for poor households using data from 1997 and 1998. Specifically, calculate the difference (between 1997 and 1998) in enrollment rates among poor households in treated villages; then compute the difference (between 1997 and 1998) in enrollment rates among poor households in treated villages. The difference between these two differences is your estimate.
-# 
-# * What is your estimate of the impact, and how does it compare to your earlier (simple difference) results?
-# * What is the counterfactual assumption underlying this estimate? 
+# Estimating the average treatment effects of the program for poor households using data from 1997 and 1998. Specifically, calculate the difference (between 1997 and 1998) in enrollment rates among poor households in treated villages; then computing the difference (between 1997 and 1998) in enrollment rates among poor households in treated villages. The difference between these two differences is our estimate.
 # 
 
 # In[13]:
@@ -430,6 +419,8 @@ print("\nThe Tabular representation of the Differences:")
 new_diff
 
 
+# **Observations:**
+# 
 # **What is your estimate of the impact, and how does it compare to your earlier (simple difference) results?**
 #     The estimate of the impact is 0.0313. This indicates that the increase in the enrollment rate can be credited to the progresa treatment. The diff-in-diff estimate is lower than the earlier observed point estimate of 0.0388(univariate) and 0.0356(multivariate). Since, the lower multivariate estimate had a better std. error, we could say that the diff-in-diff estimate is more accurate
 # 
@@ -438,12 +429,9 @@ new_diff
 
 # ### 2.5 Difference-in-Difference, version 1 (regression)
 # 
-# Now use a regression specification to estimate the average treatment effect of the program (on the poor) in a difference-in-differences framework. Include at least 5 control variables.
+# Using a regression specification to estimate the average treatment effect of the program (on the poor) in a difference-in-differences framework. Selecting 5 control variables.
 # 
-# * What is your estimate of the impact of Progresa? Be very specific in interpreting your coefficients and standard errors, and make sure to specify exactly what units you are measuring and estimating.
-# * How do these estimates of the treatment effect compare to the estimates based on the simple difference?
-# * How do these estimates compare to the difference-in-difference estimates from 2.4 above? What accounts for these differences?
-# * What is the counterfactual assumption underlying this regression? 
+# 
 
 # In[14]:
 
@@ -457,6 +445,8 @@ ddregr = smf.ols(formula='sc ~ progresa + afterT + progresa:afterT + age + dist_
 ddregr.summary()
 
 
+# **OBSERVATIONS:**
+# 
 # In order to run the regression test in the diff-in-diff framework we have to consider values of  the feature 'year' interactively with the feature 'progresa' i.e in year=97 vs year=98. We can simply assign 1 and 0 for the year 98 and 97 respectively. This would give us the before and after period. Earlier we considered only the data in the year 1998 which is post treatment.
 # 
 # **What is your estimate of the impact of Progresa? Be very specific in interpreting your coefficients and standard errors, and make sure to specify exactly what units you are measuring and estimating.**    
@@ -474,12 +464,8 @@ ddregr.summary()
 
 # ### 2.6 Difference-in-Difference, version 2
 # 
-# In the previous problem, you estimated a difference-in-differences model that compared changes in enrollment rates over time across treatment and control villages. An alternative approach would be to compare enrollment rates in 1998 between poor and non-poor across treatment and control villages. 
+# In the previous problem, we estimated a difference-in-differences model that compared changes in enrollment rates over time across treatment and control villages. An alternative approach would be to compare enrollment rates in 1998 between poor and non-poor across treatment and control villages. 
 # 
-# * How would we estimate this version of the treatment effects in a regression model? 
-# * What is the counterfactual assumption underlying this regression?
-# * How do these treatment effects compare to the estimates above?
-# * Discuss some possible explanations for differences or similarities 
 
 # In[15]:
 
@@ -488,6 +474,8 @@ dd_lm2 = smf.ols(formula='sc ~ progresa + poor + progresa:poor + age + dist_sec 
 dd_lm2.summary()
 
 
+# **OBSERVATIONS:**
+# 
 # **How would we estimate this version of the treatment effects in a regression model?**
 #     The effect of treatment, in this model, is given by the sum of coefficients influencing the 'profresa' variable. Here it is **0.027 - 0.008 x poor**, where poor is the value indicating whether the subject is labeed as poor or not.
 #     
@@ -501,13 +489,10 @@ dd_lm2.summary()
 #     This could be because there is no expected effect of the interation of these two variables. This conforms to the progresa model where only the poor households are recipient of the treatment. One other uncanny observation is the negative coefficent of 'poor' because, the household recieves the progresa treatment only when the poor value is 1. There is every reason for this coefficient to be positive, as we would expect that the increase in enrollment rate would be more in poor households.
 # 
 
-# ### 2.7 Spillover effects (extra credit)
+# ### 2.7 Spillover effects
 # 
-# Thus far, we have focused on the impact of PROGRESA on poor households. Repeat your analysis in 2.5, using a double-difference regression to estimate the impact of PROGRESA on non-poor households. In other words, compare the difference in enrollments between 1997 and 1998 for non-poor households in treatment villages with the difference in enrollments between 1997 and 1998 for non-poor households in control villages.
+# Thus far, we have focused on the impact of PROGRESA on poor households. Repeating the analysis in 2.5, using a double-difference regression to estimate the impact of PROGRESA on non-poor households. In other words, comparing the difference in enrollments between 1997 and 1998 for non-poor households in treatment villages with the difference in enrollments between 1997 and 1998 for non-poor households in control villages.
 # 
-# * A: Describe one or two reasons why PROGRESA might have impacted non-poor households.
-# * B: Do you observe any impacts of PROGRESA on the non-poor?
-# * C: What is the identifying assumption that you are using to estimate the impact of PROGRESA on non-poor households.
 
 # In[16]:
 
@@ -523,6 +508,8 @@ ddregr2 = smf.ols(formula='sc ~ progresa + afterT + progresa:afterT + age + dist
 ddregr2.summary()
 
 
+# **OBSERVATIONS:**
+# 
 # Here we get the analysis of the non poor households, we can see the diff in diff estimate of the effect progresa has on the avg, enrollment rate. The total estimate is **0.0043 + 0.0314 x afterT**. NOrmally we should not see any effect here, or see lesser effect but, the estimates here are closely relatable to the ones obtained before.
 # 
 # **A: Describe one or two reasons why PROGRESA might have impacted non-poor households.**
